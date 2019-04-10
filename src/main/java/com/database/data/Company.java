@@ -14,10 +14,4 @@ public class Company {
     private int id;
     private String name;
     private String address;
-
-    public String toString() {
-        return "Project[" +"["+"id _ " + id + "|"+
-                 "name_ " + name + "|"+
-                "address_ " + address +"]";
-    }
 }

@@ -29,12 +29,14 @@ public class JdbcConnectionUtil {
     }
 
     public static Connection getConnection() {
+        Connection dbConnection = null;
         try {
             Class.forName(DB_DRIVER);
             return DriverManager.getConnection(DB_CONNECTION, DB_USER,DB_PASSWORD);
         } catch (SQLException | ClassNotFoundException e) {
             LOGGER.warning(e.getMessage());
         }
-        return null;
+        dbConnection =null;
+        return dbConnection;
     }
 }

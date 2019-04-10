@@ -14,11 +14,4 @@ public class Project {
     private String name;
     private double cost;
     private Date date;
-
-    public String toString() {
-        return "Project[" +"id _ " + id + "|"+
-                "name_ " + name + "|"+
-                "cost_ " + cost + "|"+
-                "date_ " + date + "|" +"]" ;
     }
-}

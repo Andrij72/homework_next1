@@ -12,10 +12,4 @@ public class Skill {
     private int id;
     private String industry;
     private String level;
-
-    public String toString() {
-        return "Skill["  +"id _ " + id + "|"+
-                "industry_ " + industry + "|"+
-                "level_ " + level + "]" ;
-    }
 }
