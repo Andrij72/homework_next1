@@ -1,6 +1,5 @@
 package com.database.operations;
 
-import com.database.data.DBCloseConnect;
 import com.database.data.Developer;
 import com.database.data.JdbcConnectionUtil;
 import org.apache.log4j.Logger;
@@ -25,7 +24,6 @@ public class DeveloperCrudoprations {
 
     public Developer selectById(int id) throws SQLException {
         Connection connection = JdbcConnectionUtil.getConnection();
-        assert connection != null;
         PreparedStatement preparedStatement = connection.prepareStatement(SELECT_ID);
         preparedStatement.setInt(1, id);
 
@@ -33,13 +31,12 @@ public class DeveloperCrudoprations {
         resultSet.next();
         Developer developer = createDeveloper(resultSet);
 
-        DBCloseConnect.close(resultSet, connection, preparedStatement);
+       connection.close();
         return developer;
     }
 
     public List<Developer> selectAll() throws SQLException {
         Connection connection = JdbcConnectionUtil.getConnection();
-        assert connection != null;
         Statement statement = connection.createStatement();
 
         ResultSet resultSet = statement.executeQuery(SELECT_ALL);
@@ -47,46 +44,46 @@ public class DeveloperCrudoprations {
         while (resultSet.next()) {
             result.add(createDeveloper(resultSet));
         }
-
-        DBCloseConnect.close(resultSet, connection, statement);
+        connection.close();
         return result;
     }
 
     public void deleteById(int id) throws SQLException {
         Connection connection = JdbcConnectionUtil.getConnection();
-        assert connection != null;
         connection.setAutoCommit(false);
         PreparedStatement preparedStatement = connection.prepareStatement(DELETE);
         preparedStatement.setInt(1, id);
-
-        DBCloseConnect.close(connection, preparedStatement);
+        connection.close();
     }
 
     public void insert(Developer object) throws SQLException {
         Connection connection = JdbcConnectionUtil.getConnection();
-        assert connection != null;
         connection.setAutoCommit(false);
         PreparedStatement preparedStatement = connection.prepareStatement(INSERT);
         preparedStatement.setString(1, object.getName());
         preparedStatement.setInt(2, object.getAge());
         preparedStatement.setString(3, object.getSex());
         preparedStatement.setDouble(4, object.getSalary());
-
-        DBCloseConnect.close(connection, preparedStatement);
+        connection.close();
     }
 
     public void update(Developer object) throws SQLException {
-        Connection connection = JdbcConnectionUtil.getConnection();
-        assert connection != null;
-        connection.setAutoCommit(false);
-        PreparedStatement preparedStatement = connection.prepareStatement(UPDATE);
-        preparedStatement.setString(1, object.getName());
-        preparedStatement.setInt(2, object.getAge());
-        preparedStatement.setString(3, object.getSex());
-        preparedStatement.setDouble(4, object.getSalary());
-        preparedStatement.setInt(5, object.getId());
+        Connection connection = null;
 
-        DBCloseConnect.close(connection, preparedStatement);
+        try {
+            connection = JdbcConnectionUtil.getConnection();
+            connection.setAutoCommit(false);
+            PreparedStatement preparedStatement = connection.prepareStatement(UPDATE);
+            preparedStatement.setString(1, object.getName());
+            preparedStatement.setInt(2, object.getAge());
+            preparedStatement.setString(3, object.getSex());
+            preparedStatement.setDouble(4, object.getSalary());
+            preparedStatement.setInt(5, object.getId());
+        } finally {
+            if (connection != null) {
+                connection.close();
+            }
+        }
     }
 
     public List<Developer> getQueryDevelopersOnProject(String projectName) throws SQLException {
@@ -103,7 +100,6 @@ public class DeveloperCrudoprations {
 
     public double getSalaryOfDevelopersByProject(String projectName) throws SQLException {
         Connection connection = JdbcConnectionUtil.getConnection();
-        assert connection != null;
         String sql = null;
         try {
             sql = new Scanner(new File(pathToTheQuery + "querySalaryDevelopers.sql"))
@@ -116,14 +112,12 @@ public class DeveloperCrudoprations {
         ResultSet resultSet = preparedStatement.executeQuery();
         resultSet.next();
         double salary = resultSet.getDouble(1);
-
-        DBCloseConnect.close(resultSet, connection, preparedStatement);
+        connection.close();
         return salary;
     }
 
     private List<Developer> selectAllByCondition(String conditionalField, String pathToSql) throws SQLException {
         Connection connection = JdbcConnectionUtil.getConnection();
-        assert connection != null;
         String sql = null;
         try {
             sql = new Scanner(new File(pathToSql)).useDelimiter("").next();
@@ -138,8 +132,7 @@ public class DeveloperCrudoprations {
         while (resultSet.next()) {
             result.add(createDeveloper(resultSet));
         }
-
-        DBCloseConnect.close(resultSet, connection, preparedStatement);
+        connection.close();
         return result;
     }
 
