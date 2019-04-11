@@ -8,7 +8,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ProjectCrud {
+public class ProjectRepository {
     private static final String SELECT_ID = "SELECT * FROM projects WHERE id = ?";
     private static final String UPDATE = "UPDATE projects SET name = ?, cost = ? date = ? WHERE id = ?";
     private static final String DELETE = "DELETE FROM projects WHERE id = ?";

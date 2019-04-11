@@ -7,18 +7,18 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CustomerCrud {
+public class CustomerRepository {
 
-    // Qwery1 - SELECT_ALL, Qwery2 - SELECT_ID , Qwery3 - INSERT;  Qwery4 - DELETE;  Qwery5 - UPDATE;
-    private static final String QUERY1 = "SELECT * FROM customers WHERE id = ?";
-    private static final String QUERY2 = "INSERT INTO customers(name, age) VALUES(?, ?)";
-    private static final String QUERY3 = "DELETE FROM customers WHERE id = ?";
-    private static final String QUERY4 = "UPDATE customers SET name = ?, age = ? WHERE id = ?";
+    private static final String QUERY1_SELECT_ALL = "SELECT * FROM customers";
+    private static final String QUERY2_SELECT_ID = "SELECT * FROM customers WHERE id = ?";
+    private static final String QUERY3_INSERT = "INSERT INTO customers(name, age) VALUES(?, ?)";
+    private static final String QUERY4_DELETE = "DELETE FROM customers WHERE id = ?";
+    private static final String QUERY5_UPDATE = "UPDATE customers SET name = ?, age = ? WHERE id = ?";
 
     public Customer selectById(int id) throws SQLException {
         Connection connection = JdbcConnectionUtil.getConnection();
         assert connection != null;
-        PreparedStatement preparedStatement = connection.prepareStatement(QUERY1);
+        PreparedStatement preparedStatement = connection.prepareStatement(QUERY2_SELECT_ID);
         preparedStatement.setInt(1, id);
         ResultSet resultSet = preparedStatement.executeQuery();
         resultSet.next();
@@ -30,9 +30,8 @@ public class CustomerCrud {
     public List<Customer> selectAll() throws SQLException {
         Connection connection = JdbcConnectionUtil.getConnection();
         assert connection != null;
-        String sql = "SELECT * FROM customers";
         Statement statement = connection.createStatement();
-        ResultSet resultSet = statement.executeQuery(sql);
+        ResultSet resultSet = statement.executeQuery(QUERY1_SELECT_ALL);
         List<Customer> result = new ArrayList<>();
         while (resultSet.next()) {
             result.add(createCustomer(resultSet));
@@ -45,7 +44,7 @@ public class CustomerCrud {
         Connection connection = JdbcConnectionUtil.getConnection();
         assert connection != null;
         connection.setAutoCommit(false);
-       PreparedStatement preparedStatement = connection.prepareStatement(QUERY3);
+       PreparedStatement preparedStatement = connection.prepareStatement(QUERY4_DELETE);
         preparedStatement.setInt(1, id);
         DBCloseConnect.close(connection, preparedStatement);
     }
@@ -54,7 +53,7 @@ public class CustomerCrud {
         Connection connection = JdbcConnectionUtil.getConnection();
         assert connection != null;
         connection.setAutoCommit(false);
-        PreparedStatement preparedStatement = connection.prepareStatement(QUERY2);
+        PreparedStatement preparedStatement = connection.prepareStatement(QUERY3_INSERT);
         preparedStatement.setString(1, object.getName());
         preparedStatement.setInt(2, object.getAge());
 
@@ -65,7 +64,7 @@ public class CustomerCrud {
         Connection connection = JdbcConnectionUtil.getConnection();
         assert connection != null;
         connection.setAutoCommit(false);
-        PreparedStatement preparedStatement = connection.prepareStatement(QUERY4);
+        PreparedStatement preparedStatement = connection.prepareStatement(QUERY5_UPDATE);
         preparedStatement.setString(1, object.getName());
         preparedStatement.setInt(2, object.getAge());
         preparedStatement.setInt(3, object.getId());

@@ -7,7 +7,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SkillCrud {
+public class SkillRepository {
 
     private static final String QUERY_SELECT = "SELECT * FROM skills";
     private static final String SELECT_ID = "SELECT * FROM skills WHERE id = ?";

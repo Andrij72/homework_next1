@@ -8,7 +8,6 @@ import java.sql.Date;
 @Data
 @AllArgsConstructor
 @RequiredArgsConstructor
-
 public class Project {
     private int id;
     private String name;

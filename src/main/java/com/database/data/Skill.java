@@ -7,7 +7,6 @@ import lombok.RequiredArgsConstructor;
 @Data
 @AllArgsConstructor
 @RequiredArgsConstructor
-
 public class Skill {
     private int id;
     private String industry;
