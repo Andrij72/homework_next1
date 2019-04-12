@@ -15,56 +15,113 @@ public class CompanyRepository {
     private static final String UPDATE_ID = "UPDATE companies SET name = ?, address = ? WHERE id = ?";
 
     public List<Company> selectAll() throws SQLException {
-        Connection connection = JdbcConnectionUtil.getConnection();
-        Statement statement = connection.createStatement();
-        ResultSet resultSet = statement.executeQuery(SELECT_ALL);
-        List<Company> result = new ArrayList<>();
-        while (resultSet.next()){
-            result.add(createCompany(resultSet));
+        Connection connection = null;
+        Statement statement = null;
+        ResultSet resultSet = null;
+        List <Company> reslist = new ArrayList <>();
+        try {
+            connection = JdbcConnectionUtil.getConnection();
+            statement = connection.createStatement();
+            resultSet = statement.executeQuery(SELECT_ALL);
+            while (resultSet.next()) {
+                reslist.add(createCompany(resultSet));
+            }
+        } finally {
+            if (resultSet != null) {
+                resultSet.close();
+            }
+            if (statement != null) {
+                statement.close();
+            }
+            if (connection != null) {
+                connection.close();
+            }
         }
-        connection.close();
-        return result;
+        return reslist;
     }
 
     public Company selectById(int id) throws SQLException {
-        Connection connection = JdbcConnectionUtil.getConnection();
-        PreparedStatement preparedStatement = connection.prepareStatement(SELECT_ID);
-        preparedStatement.setInt(1, id);
-
-        ResultSet resultSet = preparedStatement.executeQuery();
-        resultSet.next();
-        Company company = createCompany(resultSet);
-        connection.close();
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet =null;
+        Company company;
+        try {
+            connection = JdbcConnectionUtil.getConnection();
+            preparedStatement = connection.prepareStatement(SELECT_ID);
+            preparedStatement.setInt(1, id);
+            resultSet = preparedStatement.executeQuery();
+            resultSet.next();
+            company = createCompany(resultSet);
+        }finally {
+            if(resultSet!=null){
+                resultSet.close();
+            }
+            if(preparedStatement!=null){
+                preparedStatement.close();
+            }
+            if(connection!=null){
+                connection.close();
+            }
+        }
         return company;
     }
 
 
     public void deleteById(int id) throws SQLException {
-
-        Connection connection = JdbcConnectionUtil.getConnection();
-        connection.setAutoCommit(false);
-        PreparedStatement preparedStatement = connection.prepareStatement(DELETE_ID);
-        preparedStatement.setInt(1, id);
-        connection.close();
+        Connection connection = null;
+        PreparedStatement statement = null;
+        try {
+            connection = JdbcConnectionUtil.getConnection();
+            connection.setAutoCommit(false);
+            statement = connection.prepareStatement(DELETE_ID);
+            statement.setInt(1, id);
+        } finally {
+            if (statement != null) {
+                statement.close();
+            }
+            if (connection != null) {
+                connection.close();
+            }
+        }
     }
 
     public void insert(Company object) throws SQLException {
-        Connection connection = JdbcConnectionUtil.getConnection();
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        try {
+       connection = JdbcConnectionUtil.getConnection();
         connection.setAutoCommit(false);
-        PreparedStatement preparedStatement = connection.prepareStatement(INSERT);
+         preparedStatement = connection.prepareStatement(INSERT);
         preparedStatement.setString(1, object.getName());
         preparedStatement.setString(2, object.getAddress());
-        connection.close();
+        }finally{
+            if (preparedStatement != null) {
+                preparedStatement.close();
+            }
+            if (connection != null) {
+                connection.close();
+            }
+        }
     }
 
     public void update(Company object) throws SQLException {
-        Connection connection = JdbcConnectionUtil.getConnection();
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        try {
+        connection = JdbcConnectionUtil.getConnection();
         connection.setAutoCommit(false);
-        PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_ID);
+        preparedStatement = connection.prepareStatement(UPDATE_ID);
         preparedStatement.setString(1, object.getName());
         preparedStatement.setString(2, object.getAddress());
         preparedStatement.setInt(3, object.getId());
-        connection.close();
+        }finally{
+            if (preparedStatement != null) {
+                preparedStatement.close();
+            }
+            if (connection != null) {
+                connection.close();
+            }
+        }
     }
 
     private Company createCompany(ResultSet resultSet) throws SQLException {

@@ -22,121 +22,195 @@ public class DeveloperCrudoprations {
 
     private String pathToTheQuery = "src/main/resources/";
 
-    public Developer selectById(int id) throws SQLException {
-        Connection connection = JdbcConnectionUtil.getConnection();
-        PreparedStatement preparedStatement = connection.prepareStatement(SELECT_ID);
-        preparedStatement.setInt(1, id);
+    public Developer selectById (int id) throws SQLException {
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+        Developer developer;
+        try {
+            connection = JdbcConnectionUtil.getConnection();
+            preparedStatement = connection.prepareStatement(SELECT_ID);
+            preparedStatement.setInt(1, id);
 
-        ResultSet resultSet = preparedStatement.executeQuery();
-        resultSet.next();
-        Developer developer = createDeveloper(resultSet);
-
-       connection.close();
+            resultSet = preparedStatement.executeQuery();
+            resultSet.next();
+            developer = createDeveloper(resultSet);
+        } finally {
+            if (resultSet != null) {
+                resultSet.close();
+            }
+            if (preparedStatement != null) {
+                preparedStatement.close();
+            }
+            if (connection != null) {
+                connection.close();
+            }
+        }
         return developer;
     }
 
-    public List<Developer> selectAll() throws SQLException {
-        Connection connection = JdbcConnectionUtil.getConnection();
-        Statement statement = connection.createStatement();
-
-        ResultSet resultSet = statement.executeQuery(SELECT_ALL);
-        List<Developer> result = new ArrayList<>();
-        while (resultSet.next()) {
-            result.add(createDeveloper(resultSet));
-        }
-        connection.close();
-        return result;
-    }
-
-    public void deleteById(int id) throws SQLException {
-        Connection connection = JdbcConnectionUtil.getConnection();
-        connection.setAutoCommit(false);
-        PreparedStatement preparedStatement = connection.prepareStatement(DELETE);
-        preparedStatement.setInt(1, id);
-        connection.close();
-    }
-
-    public void insert(Developer object) throws SQLException {
-        Connection connection = JdbcConnectionUtil.getConnection();
-        connection.setAutoCommit(false);
-        PreparedStatement preparedStatement = connection.prepareStatement(INSERT);
-        preparedStatement.setString(1, object.getName());
-        preparedStatement.setInt(2, object.getAge());
-        preparedStatement.setString(3, object.getSex());
-        preparedStatement.setDouble(4, object.getSalary());
-        connection.close();
-    }
-
-    public void update(Developer object) throws SQLException {
+    public List <Developer> selectAll () throws SQLException {
         Connection connection = null;
+        Statement statement = null;
+        ResultSet resultSet = null;
+        List <Developer> reslist = new ArrayList <>();
+        try {
+            connection = JdbcConnectionUtil.getConnection();
+            statement = connection.createStatement();
 
+            resultSet = statement.executeQuery(SELECT_ALL);
+
+            while (resultSet.next()) {
+                reslist.add(createDeveloper(resultSet));
+            }
+        } finally {
+            if (resultSet != null) {
+                resultSet.close();
+            }
+            if (statement != null) {
+                statement.close();
+            }
+            if (connection != null) {
+                connection.close();
+            }
+        }
+        return reslist;
+    }
+
+    public void deleteById (int id) throws SQLException {
+        Connection connection = null;
+        PreparedStatement statement = null;
         try {
             connection = JdbcConnectionUtil.getConnection();
             connection.setAutoCommit(false);
-            PreparedStatement preparedStatement = connection.prepareStatement(UPDATE);
-            preparedStatement.setString(1, object.getName());
-            preparedStatement.setInt(2, object.getAge());
-            preparedStatement.setString(3, object.getSex());
-            preparedStatement.setDouble(4, object.getSalary());
-            preparedStatement.setInt(5, object.getId());
+            statement = connection.prepareStatement(DELETE);
+            statement.setInt(1, id);
         } finally {
+            if (statement != null) {
+                statement.close();
+            }
             if (connection != null) {
                 connection.close();
             }
         }
     }
 
-    public List<Developer> getQueryDevelopersOnProject(String projectName) throws SQLException {
+    public void insert (Developer object) throws SQLException {
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        try {
+            connection = JdbcConnectionUtil.getConnection();
+            connection.setAutoCommit(false);
+            preparedStatement = connection.prepareStatement(INSERT);
+            preparedStatement.setString(1, object.getName());
+            preparedStatement.setInt(2, object.getAge());
+            preparedStatement.setString(3, object.getSex());
+            preparedStatement.setDouble(4, object.getSalary());
+        } finally {
+            if (preparedStatement != null) {
+                preparedStatement.close();
+            }
+            if (connection != null) {
+                connection.close();
+            }
+        }
+    }
+
+    public void update (Developer object) throws SQLException {
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        try {
+            connection = JdbcConnectionUtil.getConnection();
+            connection.setAutoCommit(false);
+            preparedStatement = connection.prepareStatement(UPDATE);
+            preparedStatement.setString(1, object.getName());
+            preparedStatement.setInt(2, object.getAge());
+            preparedStatement.setString(3, object.getSex());
+            preparedStatement.setDouble(4, object.getSalary());
+            preparedStatement.setInt(5, object.getId());
+        } finally {
+            if (preparedStatement != null) {
+                preparedStatement.close();
+            }
+            if (connection != null) {
+                connection.close();
+            }
+        }
+    }
+
+    public List <Developer> getQueryDevelopersOnProject (String projectName) throws SQLException {
         return selectAllByCondition(projectName, pathToTheQuery + "queryDevelopersOnProject.sql");
     }
 
-    public List<Developer> getMiddleDevelopers(String skillLevel) throws SQLException {
+    public List <Developer> getMiddleDevelopers (String skillLevel) throws SQLException {
         return selectAllByCondition(skillLevel, pathToTheQuery + "queryMiddleDevelopers.sql");
     }
 
-    public List<Developer> getListOfDevelopersByIndustry(String branchDevelopment) throws SQLException {
+    public List <Developer> getListOfDevelopersByIndustry (String branchDevelopment) throws SQLException {
         return selectAllByCondition(branchDevelopment, pathToTheQuery + "queryAllDevelopers.sql");
     }
 
-    public double getSalaryOfDevelopersByProject(String projectName) throws SQLException {
-        Connection connection = JdbcConnectionUtil.getConnection();
-        String sql = null;
+    public double getSalaryOfDevelopersByProject (String projectName) throws SQLException {
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+        double salary;
         try {
-            sql = new Scanner(new File(pathToTheQuery + "querySalaryDevelopers.sql"))
-                    .useDelimiter("").next();
-        } catch (FileNotFoundException e) {
-            LOGGER.error(e.getMessage());
+            connection = JdbcConnectionUtil.getConnection();
+            String sql = null;
+            try {
+                sql = new Scanner(new File(pathToTheQuery + "querySalaryDevelopers.sql"))
+                        .useDelimiter("").next();
+            } catch (FileNotFoundException e) {
+                LOGGER.error(e.getMessage());
+            }
+            preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setString(1, projectName);
+            resultSet = preparedStatement.executeQuery();
+            resultSet.next();
+            salary = resultSet.getDouble(1);
+        } finally {
+            if (preparedStatement != null) {
+                preparedStatement.close();
+            }
+            if (connection != null) {
+                connection.close();
+            }
         }
-        PreparedStatement preparedStatement = connection.prepareStatement(sql);
-        preparedStatement.setString(1, projectName);
-        ResultSet resultSet = preparedStatement.executeQuery();
-        resultSet.next();
-        double salary = resultSet.getDouble(1);
-        connection.close();
         return salary;
     }
 
-    private List<Developer> selectAllByCondition(String conditionalField, String pathToSql) throws SQLException {
-        Connection connection = JdbcConnectionUtil.getConnection();
-        String sql = null;
+    private List <Developer> selectAllByCondition (String conditionalField, String pathToSql) throws SQLException {
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+        List <Developer> result = new ArrayList <>();
         try {
-            sql = new Scanner(new File(pathToSql)).useDelimiter("").next();
-        } catch (FileNotFoundException e) {
-            LOGGER.error(e.getMessage());
+            Connection connection = JdbcConnectionUtil.getConnection();
+            String sql = null;
+            try {
+                sql = new Scanner(new File(pathToSql)).useDelimiter("").next();
+            } catch (FileNotFoundException e) {
+                LOGGER.error(e.getMessage());
+            }
+            preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setString(1, conditionalField);
+            resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                result.add(createDeveloper(resultSet));
+            }
+        } finally {
+            if (preparedStatement != null) {
+                preparedStatement.close();
+            }
+            if (connection != null) {
+                connection.close();
+            }
         }
-        PreparedStatement preparedStatement = connection.prepareStatement(sql);
-        preparedStatement.setString(1, conditionalField);
-        ResultSet resultSet = preparedStatement.executeQuery();
-
-        List<Developer> result = new ArrayList<>();
-        while (resultSet.next()) {
-            result.add(createDeveloper(resultSet));
-        }
-        connection.close();
         return result;
     }
 
-    private Developer createDeveloper(ResultSet resultSet) throws SQLException {
+    private Developer createDeveloper (ResultSet resultSet) throws SQLException {
         return new Developer(resultSet.getInt("id"),
                 resultSet.getString("name"),
                 resultSet.getInt("age"),

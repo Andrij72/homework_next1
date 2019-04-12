@@ -15,55 +15,115 @@ public class ProjectRepository {
 
 
     public Project select(int id) throws SQLException {
-        Connection connection = JdbcConnectionUtil.getConnection();
-        PreparedStatement preparedStatement = connection.prepareStatement(SELECT_ID);
-        preparedStatement.setInt(1, id);
-        ResultSet resultSet = preparedStatement.executeQuery();
-        resultSet.next();
-        Project project = createProject(resultSet);
-        connection.close();
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet =null;
+        Project project;
+        try {
+            connection = JdbcConnectionUtil.getConnection();
+            preparedStatement = connection.prepareStatement(SELECT_ID);
+            preparedStatement.setInt(1, id);
+            resultSet = preparedStatement.executeQuery();
+            resultSet.next();
+            project = createProject(resultSet);
+        } finally {
+            if(resultSet!=null){
+               resultSet.close();
+            }
+            if(preparedStatement!=null){
+                preparedStatement.close();
+            }
+            if(connection!=null){
+                connection.close();
+            }
+        }
         return project;
     }
 
-    public List<Project> selectAll() throws SQLException {
-        Connection connection = JdbcConnectionUtil.getConnection();
-        Statement statement = connection.createStatement();
-        ResultSet resultSet = statement.executeQuery(SELECT_ALL);
-        List<Project> result = new ArrayList<>();
-        while (resultSet.next()) {
-            result.add(createProject(resultSet));        }
-
-        connection.close();
+    public List <Project> selectAll () throws SQLException {
+        Connection connection = null;
+        Statement statement = null;
+        ResultSet resultSet = null;
+        List <Project> result = new ArrayList <>();
+        try {
+            connection = JdbcConnectionUtil.getConnection();
+            statement = connection.createStatement();
+            resultSet = statement.executeQuery(SELECT_ALL);
+            while (resultSet.next()) {
+                result.add(createProject(resultSet));
+            }
+        } finally {
+            if (resultSet != null) {
+                resultSet.close();
+            }
+            if (statement != null) {
+                statement.close();
+            }
+            if (connection != null) {
+                connection.close();
+            }
+        }
         return result;
     }
 
     public void delete(int id) throws SQLException {
-        Connection connection = JdbcConnectionUtil.getConnection();
+        Connection connection = null;
+        PreparedStatement statement = null;
+
+        try {
+        connection = JdbcConnectionUtil.getConnection();
          connection.setAutoCommit(false);
-        PreparedStatement preparedStatement = connection.prepareStatement(DELETE);
-        preparedStatement.setInt(1, id);
-        connection.close();
+         statement = connection.prepareStatement(DELETE);
+        statement.setInt(1, id);
+        } finally {
+            if (statement != null) {
+                statement.close();
+            }
+            if (connection != null) {
+                connection.close();
+            }
+        }
     }
 
     public void insert(Project object) throws SQLException {
-        Connection connection = JdbcConnectionUtil.getConnection();
-        connection.setAutoCommit(false);
-        PreparedStatement preparedStatement = connection.prepareStatement(INSERT);
-        preparedStatement.setString(1, object.getName());
-        preparedStatement.setDouble(2, object.getCost());
-        preparedStatement.setDate(3, object.getDate());
-        connection.close();
-    }
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        try {
+            connection = JdbcConnectionUtil.getConnection();
+            connection.setAutoCommit(false);
+            preparedStatement = connection.prepareStatement(INSERT);
+            preparedStatement.setString(1, object.getName());
+            preparedStatement.setDouble(2, object.getCost());
+            preparedStatement.setDate(3, object.getDate());
+        }finally{
+                if (preparedStatement != null) {
+                    preparedStatement.close();
+                }
+                if (connection != null) {
+                    connection.close();
+                }
+            }
+        }
 
     public void update(Project object) throws SQLException {
-        Connection connection = JdbcConnectionUtil.getConnection();
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        try {
+         connection = JdbcConnectionUtil.getConnection();
         connection.setAutoCommit(false);
-        PreparedStatement preparedStatement = connection.prepareStatement(UPDATE);
+         preparedStatement = connection.prepareStatement(UPDATE);
         preparedStatement.setString(1, object.getName());
         preparedStatement.setDouble(2, object.getCost());
         preparedStatement.setDate(3, object.getDate());
         preparedStatement.setInt(4, object.getId());
-        connection.close();
+        }finally{
+            if (preparedStatement != null) {
+                preparedStatement.close();
+            }
+            if (connection != null) {
+                connection.close();
+            }
+        }
     }
 
     private Project createProject(ResultSet resultSet) throws SQLException {
