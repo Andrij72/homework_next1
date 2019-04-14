@@ -8,3 +8,4 @@ package com.pattern.singelton;
             return INSTANCE;
         }
     }
+	
