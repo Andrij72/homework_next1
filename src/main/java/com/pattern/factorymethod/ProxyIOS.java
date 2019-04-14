@@ -1,8 +1,8 @@
-package com.pattern.method;
+package com.pattern.factorymethod;
 
 public class ProxyIOS implements SYS {
     private String internetSite;
-    private IPHONEsys iOS;
+    private IphonSys iOS;
 
     public ProxyIOS (String internetSite) {
         this.internetSite = internetSite;
@@ -11,7 +11,7 @@ public class ProxyIOS implements SYS {
     @Override
     public String getSYS () {
         if (iOS == null) {
-            iOS = new IPHONEsys(internetSite);
+            iOS = new IphonSys(internetSite);
         }
         return iOS.getSYS();
     }

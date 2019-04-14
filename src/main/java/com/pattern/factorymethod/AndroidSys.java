@@ -1,4 +1,4 @@
-package com.pattern.method;
+package com.pattern.factorymethod;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -7,14 +7,14 @@ import lombok.RequiredArgsConstructor;
 @Data
 @AllArgsConstructor
 @RequiredArgsConstructor
-public class ANDROIDsys implements SYS {
+public class AndroidSys implements SYS {
     private boolean isMultithreading;
     private String typeOfUI;
-    private static ANDROIDsys instance = null;
+    private static AndroidSys instance = null;
 
-    public static ANDROIDsys getInstance(boolean multithreadin, String typeOfUI) {
+    public static AndroidSys getInstance(boolean multithreadin, String typeOfUI) {
         if (instance == null) {
-            instance = new ANDROIDsys(multithreadin, typeOfUI);
+            instance = new AndroidSys(multithreadin, typeOfUI);
         }
         return instance;
     }

@@ -1,12 +1,12 @@
-package com.pattern.method;
+package com.pattern.factorymethod;
 
 import lombok.Data;
 
 @Data
-public class IPHONEsys implements SYS {
+public class IphonSys implements SYS {
     private String internetSite;
 
-    public IPHONEsys (String internetSite) {
+    public IphonSys (String internetSite) {
         this.internetSite = internetSite;
         load(internetSite);
     }

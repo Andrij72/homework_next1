@@ -1,4 +1,4 @@
-package com.pattern.method;
+package com.pattern.factorymethod;
 
 public interface SYS {
     String getSYS ();

@@ -1,19 +1,19 @@
-package com.pattern.method;
+package com.pattern.factorymethod;
 
 import lombok.Data;
 
 @Data
-public class UBUNTUsys implements SYS {
+public class UbuntuSys implements SYS {
     private int bitDepth;
     private boolean isMultithreading;
     private String typeOfUI;
     private String performance;
 
     public static class Builder {
-        private UBUNTUsys ubuntUsys;
+        private UbuntuSys ubuntUsys;
 
         public Builder() {
-            ubuntUsys = new UBUNTUsys();
+            ubuntUsys = new UbuntuSys();
         }
 
         public Builder setBitDepth(int bitDepth) {
@@ -36,7 +36,7 @@ public class UBUNTUsys implements SYS {
             return this;
         }
 
-        public UBUNTUsys build() {
+        public UbuntuSys build() {
             return ubuntUsys;
         }
     }
