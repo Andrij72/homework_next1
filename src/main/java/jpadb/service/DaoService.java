@@ -1,9 +1,9 @@
-package jpadb.objects;
+package jpadb.service;
 
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 
-public class JpaPersistent {
+public class DaoService {
         private static final String PERSISTENCE_UNIT_NAME = "PERSISTENCE_MANAGER";
         private static EntityManagerFactory factory;
 

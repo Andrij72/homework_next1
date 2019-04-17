@@ -23,7 +23,7 @@ public class JpaCompany {
             if (entityManager != null) {
                 entityManager.getTransaction().rollback();
             }
-            log.error(e.getMessage());
+            log.warn(e.getMessage());
             return false;
         }
     }

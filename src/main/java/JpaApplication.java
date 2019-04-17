@@ -1,11 +1,11 @@
-import jpadb.objects.JpaPersistent;
+import jpadb.service.DaoService;
 import jpadb.entities.Developer;
 import javax.persistence.EntityManager;
 import jpadb.objects.JpaDeveloper;
 
 public class JpaApplication {
     public static void main(String[] args) {
-        EntityManager entityManager =  JpaPersistent.getEntityManagerFactory().createEntityManager();
+        EntityManager entityManager =  DaoService.getEntityManagerFactory().createEntityManager();
         Developer developer = new Developer();
         developer.setName("AndrewK");
         developer.setAge(30);
@@ -13,6 +13,6 @@ public class JpaApplication {
         developer.setSalary(5000.00);
        JpaDeveloper developerJpa = new  JpaDeveloper(entityManager);
         developerJpa.insertDeveloper(developer);
-        JpaPersistent.shutdown();
+        DaoService.shutdown();
     }
 }
