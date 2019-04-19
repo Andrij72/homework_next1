@@ -1,19 +1,21 @@
 package jpadb.service;
 
+import lombok.experimental.UtilityClass;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 
+@UtilityClass
 public class DaoService {
-        private static final String PERSISTENCE_UNIT_NAME = "PERSISTENCE_MANAGER";
-        private static EntityManagerFactory factory;
+        private final String PERSISTENCE_UNIT_NAME = "PERSISTENCE_MANAGER";
+        private EntityManagerFactory factory;
 
-        public static EntityManagerFactory getEntityManagerFactory() {
+        public EntityManagerFactory getEntityManagerFactory() {
             if (factory == null) {
                 factory = Persistence.createEntityManagerFactory(PERSISTENCE_UNIT_NAME);            }
             return factory;
         }
 
-        public static void shutdown() {
+        public void shutdown() {
             if (factory != null) {
                 factory.close();
             }

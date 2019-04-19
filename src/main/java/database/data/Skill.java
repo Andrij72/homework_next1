@@ -8,7 +8,7 @@ import lombok.RequiredArgsConstructor;
 @AllArgsConstructor
 @RequiredArgsConstructor
 public class Skill {
-    private int id;
+    private Long id;
     private String industry;
-    private String level;
+    private Level level;
 }

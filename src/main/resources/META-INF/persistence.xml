@@ -7,7 +7,6 @@
     <persistence-unit name="MYPERSISTENCE">
         <description> Hibernate JPA Configuration Task</description>
         <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
-
         <properties>
             <property name="javax.persistence.jdbc.driver" value="com.mysql.cj.jdbc.Driver" />
             <property name="javax.persistence.jdbc.url" value="jdbc:3306/dbmateakademy" />

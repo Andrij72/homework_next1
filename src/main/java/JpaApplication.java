@@ -9,8 +9,8 @@ public class JpaApplication {
         Developer developer = new Developer();
         developer.setName("AndrewK");
         developer.setAge(30);
-        developer.setGender("male");
-        developer.setSalary(5000.00);
+        developer.setSex("male");
+        developer.setSalary(5000);
        JpaDeveloper developerJpa = new  JpaDeveloper(entityManager);
         developerJpa.insertDeveloper(developer);
         DaoService.shutdown();

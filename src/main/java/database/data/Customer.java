@@ -8,7 +8,7 @@ import lombok.RequiredArgsConstructor;
 @AllArgsConstructor
 @RequiredArgsConstructor
 public class Customer {
-    private int id;
+    private Long id;
     private String name;
-    private int age;
+    private Integer age;
 }

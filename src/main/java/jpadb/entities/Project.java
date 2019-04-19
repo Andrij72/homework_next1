@@ -4,24 +4,14 @@ import database.data.Company;
 import database.data.Developer;
 import lombok.*;
 import lombok.extern.log4j.Log4j;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.PostLoad;
-import javax.persistence.PostPersist;
-import javax.persistence.PostRemove;
-import javax.persistence.PostUpdate;
-import javax.persistence.PrePersist;
-import javax.persistence.PreRemove;
-import javax.persistence.PreUpdate;
-import javax.persistence.Table;
+
+import javax.persistence.*;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Log4j
@@ -31,8 +21,9 @@ public class Project extends TopClass {
 
     @Column(name = "cost")
     private Double cost;
-
     @Column(name = "date")
+    @Basic
+    @Temporal(TemporalType.DATE)
     private Date date;
 
     @ManyToMany

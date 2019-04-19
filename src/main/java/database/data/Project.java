@@ -3,15 +3,14 @@ package database.data;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
-
 import java.sql.Date;
 
 @Data
 @AllArgsConstructor
 @RequiredArgsConstructor
 public class Project {
-    private int id;
+    private Long id;
     private String name;
-    private double cost;
+    private Integer cost;
     private Date date;
     }

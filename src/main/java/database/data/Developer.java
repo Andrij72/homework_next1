@@ -8,9 +8,9 @@ import lombok.RequiredArgsConstructor;
 @AllArgsConstructor
 @RequiredArgsConstructor
 public class Developer {
-    private int id;
+    private Long id;
     private String name;
-    private int age;
+    private Integer age;
     private String sex;
-    private double salary;
+    private Integer salary;
     }
